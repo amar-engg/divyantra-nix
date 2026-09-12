@@ -13,6 +13,7 @@
     fzf
     zoxide
     starship
+    tmux
   ];
 
   programs.zsh = {

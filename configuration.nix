@@ -23,4 +23,35 @@
   ];
 
   programs.zsh.enable = true;
+
+system.primaryUser = "amar";
+
+nix-homebrew = {
+  enable = true;
+  user = "amar";
+
+  # We do not need Intel/Rosetta Homebrew yet.
+  enableRosetta = false;
+
+  # If Homebrew ever already exists, adopt it.
+  autoMigrate = true;
+};
+
+homebrew = {
+  enable = true;
+
+  onActivation = {
+    autoUpdate = true;
+    upgrade = false;
+    cleanup = "none";
+  };
+
+  casks = [
+    "wezterm"
+    "iterm2"
+  ];
+};
+
+
 }
+
