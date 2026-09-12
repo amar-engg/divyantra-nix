@@ -19,6 +19,7 @@
   # Minimal packages for now.
   environment.systemPackages = with pkgs; [
     git
+    gh
   ];
 
   programs.zsh.enable = true;
