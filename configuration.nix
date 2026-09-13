@@ -12,7 +12,7 @@
       "terraform"
     ];
 
-  # Determinate Nix already manages Nix itself.
+  # Determinate Nix manages Nix itself.
   nix.enable = false;
 
   # Required by nix-darwin.
@@ -74,7 +74,7 @@
     brews = [
       "jundot/omlx/omlx"
     ];
-    
+
     casks = [
       # Terminals
       "wezterm"
@@ -96,7 +96,6 @@
       "stats"
       "raycast"
       "rectangle"
-
       "opensuperwhisper"
     ];
   };

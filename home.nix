@@ -66,6 +66,13 @@ in
 
   programs.home-manager.enable = true;
 
+  # Explicitly make macOS GUI applications from Home Manager
+  # available under ~/Applications/Home Manager Apps.
+  #
+  # This is already the default for stateVersion >= 25.11,
+  # but keeping it explicit makes our intent clear.
+  targets.darwin.copyApps.enable = true;
+
   # ------------------------------------------------------------
   # Command-line packages
   # ------------------------------------------------------------
@@ -112,6 +119,9 @@ in
     opencode
     llama-cpp
     opencodeLocal
+
+    # Do NOT add openclaw here.
+    # programs.openclaw below owns it.
   ];
 
   # ------------------------------------------------------------
@@ -253,4 +263,19 @@ in
 
     return config
   '';
+
+  # ------------------------------------------------------------
+  # OpenClaw
+  #
+  # nix-openclaw owns:
+  #   - OpenClaw CLI
+  #   - OpenClaw macOS app
+  #   - Gateway launchd service
+  #
+  # We will add gateway auth, models, channels and workspace
+  # configuration in the next step.
+  # ------------------------------------------------------------
+  programs.openclaw = {
+    enable = true;
+  };
 }
