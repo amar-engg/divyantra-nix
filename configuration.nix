@@ -52,6 +52,7 @@ casks = [
 
   "visual-studio-code"
   "cursor"
+  "sublime-text"
 
   "google-chrome"
   "firefox"
