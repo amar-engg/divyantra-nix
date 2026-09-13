@@ -46,10 +46,23 @@ homebrew = {
     cleanup = "none";
   };
 
-  casks = [
-    "wezterm"
-    "iterm2"
-  ];
+casks = [
+  "wezterm"
+  "iterm2"
+
+  "visual-studio-code"
+  "cursor"
+
+  "google-chrome"
+  "firefox"
+
+  "obsidian"
+
+  "stats"
+  "raycast"
+  "rectangle"
+];
+
 };
 
 
