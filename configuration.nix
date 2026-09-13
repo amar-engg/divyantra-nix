@@ -85,6 +85,8 @@
       "stats"
       "raycast"
       "rectangle"
+
+      "opensuperwhisper"
     ];
   };
 }
