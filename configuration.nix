@@ -64,6 +64,17 @@
       cleanup = "none";
     };
 
+    taps = [
+      {
+        name = "jundot/omlx";
+        clone_target = "https://github.com/jundot/omlx";
+      }
+    ];
+
+    brews = [
+      "jundot/omlx/omlx"
+    ];
+    
     casks = [
       # Terminals
       "wezterm"
