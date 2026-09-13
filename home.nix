@@ -33,7 +33,8 @@
     maven
     gradle
 
-    awscli2    
+    awscli2
+    terraform
 
   ];
 
