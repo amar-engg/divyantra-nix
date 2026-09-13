@@ -31,7 +31,9 @@
 
     jdk21
     maven
-    gradle    
+    gradle
+
+    awscli2    
 
   ];
 
