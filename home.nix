@@ -1,5 +1,64 @@
 { pkgs, ... }:
 
+let
+  # ------------------------------------------------------------
+  # OpenCode local launcher
+  #
+  # Usage:
+  #   cd ~/projects/my-project
+  #   oc
+  #
+  # Starts llama.cpp + Qwen3-Coder automatically if the
+  # local server is not already running, then launches OpenCode.
+  # ------------------------------------------------------------
+  opencodeLocal = pkgs.writeShellScriptBin "oc" ''
+    LLAMA_URL="http://127.0.0.1:8080"
+    LLAMA_LOG="/tmp/llama-server.log"
+    STARTED_LLAMA=0
+
+    if ! ${pkgs.curl}/bin/curl -s "$LLAMA_URL/health" >/dev/null 2>&1; then
+      echo "Starting Qwen3-Coder via llama.cpp..."
+
+      nohup ${pkgs.llama-cpp}/bin/llama-server \
+        -hf wekW/Qwen3-Coder-30B-A3B-Instruct-Q4_K_M-GGUF:Q4_K_M \
+        -c 32768 \
+        --parallel 1 \
+        --host 127.0.0.1 \
+        --port 8080 \
+        > "$LLAMA_LOG" 2>&1 &
+
+      LLAMA_PID=$!
+      STARTED_LLAMA=1
+
+      echo "Waiting for llama-server..."
+
+      count=0
+      until ${pkgs.curl}/bin/curl -s "$LLAMA_URL/health" >/dev/null 2>&1; do
+        sleep 1
+        count=$((count + 1))
+
+        if [ "$count" -ge 120 ]; then
+          echo "llama-server did not become ready."
+          kill "$LLAMA_PID" 2>/dev/null || true
+          exit 1
+        fi
+      done
+
+      echo "llama-server ready."
+    fi
+
+    ${pkgs.opencode}/bin/opencode "$@"
+    OPENCODE_EXIT=$?
+
+    if [ "$STARTED_LLAMA" -eq 1 ]; then
+      echo "Stopping llama-server..."
+      kill "$LLAMA_PID" 2>/dev/null || true
+    fi
+
+    exit "$OPENCODE_EXIT"
+  '';
+
+in
 {
   home.username = "amar";
   home.homeDirectory = "/Users/amar";
@@ -11,9 +70,11 @@
   # Command-line packages
   # ------------------------------------------------------------
   home.packages = with pkgs; [
+    # Search / navigation
     ripgrep
     fd
 
+    # CLI utilities
     bat
     eza
     jq
@@ -21,28 +82,36 @@
     tree
     btop
 
+    # Git
     lazygit
 
+    # Python
     python3
     uv
 
+    # JavaScript / Node
     nodejs
     pnpm
 
+    # Java
     jdk21
     maven
     gradle
 
+    # Cloud / Infrastructure
     awscli2
     terraform
 
+    # Data
     duckdb
 
+    # Editors
     neovim
 
+    # AI / Local coding
     opencode
     llama-cpp
-
+    opencodeLocal
   ];
 
   # ------------------------------------------------------------
@@ -78,6 +147,12 @@
       gp = "git push";
 
       lg = "lazygit";
+
+      # View llama.cpp server log
+      lmlog = "tail -f /tmp/llama-server.log";
+
+      # Stop local llama.cpp model server
+      lmstop = "pkill llama-server";
     };
   };
 
@@ -179,4 +254,3 @@
     return config
   '';
 }
-
