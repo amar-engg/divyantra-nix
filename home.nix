@@ -277,5 +277,9 @@ in
   # ------------------------------------------------------------
   programs.openclaw = {
     enable = true;
+
+    runtimePlugins = [
+      "llama-cpp"
+    ];
   };
 }
