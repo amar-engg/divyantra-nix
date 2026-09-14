@@ -238,21 +238,30 @@ in
   # ------------------------------------------------------------
   # WezTerm
   # ------------------------------------------------------------
+# ------------------------------------------------------------
+# WezTerm
+# ------------------------------------------------------------
   home.file.".wezterm.lua".text = ''
     local wezterm = require 'wezterm'
 
     local config = wezterm.config_builder()
 
+    -- Font
+    config.font = wezterm.font('JetBrains Mono')
     config.font_size = 14.0
+    config.line_height = 1.05
 
+    -- Theme
+    config.color_scheme = 'Catppuccin Mocha'
+
+    -- Tabs
     config.enable_tab_bar = true
     config.hide_tab_bar_if_only_one_tab = true
     config.use_fancy_tab_bar = false
 
+    -- Window
     config.window_decorations = "RESIZE"
-    config.scrollback_lines = 10000
-
-    config.color_scheme = "Builtin Solarized Dark"
+    config.adjust_window_size_when_changing_font_size = false
 
     config.window_padding = {
       left = 10,
@@ -260,6 +269,10 @@ in
       top = 8,
       bottom = 8,
     }
+
+    -- Terminal behavior
+    config.scrollback_lines = 100000
+    config.audible_bell = "Disabled"
 
     return config
   '';
